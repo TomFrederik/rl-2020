@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.8.30)  1 SEP 2020 11:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.8.30)  1 SEP 2020 11:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -998,7 +998,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 82--83
 Excluding 'comment' comment. [2] (./exercise_2.aux) ) 
 Here is how much of TeX's memory you used:
  17570 strings out of 494757
- 333946 string characters out of 6175785
+ 333944 string characters out of 6175785
  422992 words of memory out of 5000000
  20521 multiletter control sequences out of 15000+600000
  13410 words of font info for 66 fonts, out of 8000000 for 9000
@@ -1016,7 +1016,7 @@ msfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/te
 xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on exercise_2.pdf (2 pages, 117030 bytes).
+Output written on exercise_2.pdf (2 pages, 117230 bytes).
 PDF statistics:
  62 PDF objects out of 1000 (max. 8388607)
  45 compressed objects within 1 object stream
