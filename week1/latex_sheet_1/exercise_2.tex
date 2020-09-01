@@ -1,0 +1,125 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{scrextend}
+\usepackage{mathrsfs}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{float}
+\usepackage{comment}
+\usepackage{my_math}
+
+\titleformat*{\section}{\normalsize\bfseries}
+\setlength{\droptitle}{-3cm}
+
+\title{Reinforcement Learning \\[3mm] Homework Chapters 1, 2}
+\author{Tom Lieberum - ID 13253042}
+
+\begin{document}
+\date{}
+\maketitle
+
+
+\section*{2.1: Dynamic Programming}
+
+\begin{enumerate}[label*=\arabic*.]
+
+\item
+
+Stochastic:
+\begin{align*}
+v^\pi(s) \,&=\, \expval{a\sim\pi(\cdot|s)}{q^\pi(s,a)}\\[3mm]
+\,&=\, 
+\begin{cases}
+\sum_{a\in\cal A}\pi(a|s) \cdot q^\pi(s,a), \,\, \text{discrete case}\\[2mm]
+\int_{\cal A}\pi(a|s) \cdot q^\pi(s,a) \,da, \,\, \text{continuous case}
+\end{cases}
+\end{align*}
+
+
+\noindent Deterministic:
+\[
+v^\pi(s) \,=\,  q^\pi(s,\pi(s))
+\]
+
+\item
+\begin{align*}
+q_{k+1}(s,a) &= \expval{}{R_{t+1} + \gamma \max_{a'\in\cal A} {q_k(S_{t+1},a')} | S_t=s, A_t=a}\\[3mm]
+&= \sum_{s',r} p(s',r|s,a)\left[ r + \gamma\, \max_{a' \in \cal A}\,q_{k}(s',a') \right]
+\end{align*}
+
+
+\item
+\[
+Q^\pi_{k+1} \,=\, \sum_{s',r}p(s',r|s,a) \left[ r + \gamma\, \sum_{a'\in\cal A} \pi(a'|s')\cdot Q^\pi_{k}(s',a') \right]
+\]
+
+\item
+\[
+\pi_{new}(s) = \argmax_{a\in \cal A}Q^{\pi_{old}}(s,a)
+\]
+
+\end{enumerate}
+
+\section*{2.2: Coding Assignment - Dynamic Programming}
+\begin{enumerate}[label*=\arabic*.]
+\item
+Cf. code.
+
+\item
+
+[PLACEHOLDER]
+
+\end{enumerate}
+
+\begin{comment}
+\section*{2.3: Exam Question: Dynamic Programming}
+\begin{enumerate}[label*=\arabic*.]
+
+\item
+
+\begin{enumerate}[label=(\alph*)]
+\item False, both converge to the optimal policy.
+
+
+\item
+Technically False. Value Iteration does not evaluate any policy, it just improves the estimate of the optimal value function in each step, given the current estimate. In fact, intermediate value functions may not correspond to any particular policy.
+
+\end{enumerate}
+
+\item
+When policy iteration stabilizes, then the optimal actions do not change. Say the stable policy is $\pi$. For $v^\pi$ we always have the Bellman expectation equation for a deterministic policy $\pi$ (which we can assume because the improvement step creates a deterministic policy):
+\[ 
+v^\pi \,=\, \sum_{s', r} p(s',r|s,\pi(s)) \left[ r + \gamma v^\pi(s') \right] 
+\]
+
+Since $\pi$ is stable and $\pi$ is chosen such to maximize the RHS above we can also replace it with a max over actions.
+
+It remains to be shown that the solution to the equation above is unique and thereby $v^*=v^\pi$.
+\end{enumerate}
+
+\section*{2.4: Monte Carlo}
+\begin{enumerate}[label*=\arabic*.]
+
+\item
+
+\begin{enumerate}[label=(\alph*)]
+\item 
+\[
+v(s_0)\,=\,0.9^2 + 0.9^4 + 0.9^3 \,=\, 2.1951
+\]
+
+\item
+\[
+v(s_0)
+\]
+
+\end{enumerate}
+\end{enumerate}
+\end{comment}
+
+\end{document}
