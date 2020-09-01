@@ -72,9 +72,32 @@ Cf. code.
 
 \item
 
-[PLACEHOLDER]
+During each iteration of value iteration we compute the maximum over $|\cal A|$ elements which take themselves $O(|\cal S||\cal R|)$ operations to compute. So each iteration in VI has time complexity $O(|\cal S||\cal R||\cal A|)$, if we assume that evaluating $v$ has constant time complexity (e.g. when we are in a tabular case). \\[4mm]
+
+In policy iteration, we have two steps per iteration.
+In the evaluation step, each improvement in the evaluation costs $O( |\cal S||\cal R||\cal A|)$ time, which we need to multiply by the number of iterations it takes for the evaluation to converge to $v^\pi$.
+
+In the improvement step, we essentially perform the same computation as in the value iteration update, just that we are concerned with the argmax, rather than the max. So this step costs $O(|\cal S||\cal R||\cal A|)$ as well.
+
+So, if we assume that it takes value iteration a factor of $\alpha$ more global iterations to converge than policy iteration (e.g. $\alpha = 1$), then value iteration is faster by a factor of $N/\alpha$ where $N$ is the expected number of iterations we need for the policy evaluation step to converge to $v^\pi$.
 
 \end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \begin{comment}
 \section*{2.3: Exam Question: Dynamic Programming}
