@@ -54,13 +54,20 @@ q_{k+1}(s,a) &= \expval{}{R_{t+1} + \gamma \max_{a'\in\cal A} {q_k(S_{t+1},a')} 
 
 
 \item
+For all states $s$ and actions $a$:
+
 \[
-Q^\pi_{k+1} \,=\, \sum_{s',r}p(s',r|s,a) \left[ r + \gamma\, \sum_{a'\in\cal A} \pi(a'|s')\cdot Q^\pi_{k}(s',a') \right]
+Q^\pi(s,a) \,\leftarrow\, \sum_{s',r}p(s',r|s,a) \left[ r + \gamma\, \sum_{a'\in\cal A} \pi(a'|s')\cdot Q^\pi(s',a') \right]
+\]
+For deterministic policies $\pi(s)$ we get
+
+\[
+Q^\pi(s,a) \,\leftarrow\, \sum_{s',r}p(s',r|s,a) \left[ r + \gamma\, \cdot Q^\pi(s',\pi(s')) \right]
 \]
 
 \item
 \[
-\pi_{new}(s) = \argmax_{a\in \cal A}Q^{\pi_{old}}(s,a)
+\pi(s) \leftarrow \argmax_{a\in \cal A}Q^{\pi}(s,a)
 \]
 
 \end{enumerate}
