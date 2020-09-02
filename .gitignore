@@ -1,1 +1,13 @@
 */data
+*.syntex.gz
+*.aux
+*.bbl
+*.blg
+*.bcf
+*.fdb_latexmk
+*.fls
+*.log
+*.run.xml
+*.out
+__pycache__
+.ipynb_checkpoints
