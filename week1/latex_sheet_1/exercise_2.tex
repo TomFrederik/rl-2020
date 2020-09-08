@@ -48,7 +48,7 @@ v^\pi(s) \,=\,  q^\pi(s,\pi(s))
 
 \item
 \begin{align*}
-q_{k+1}(s,a) &= \expval{}{R_{t+1} + \gamma \max_{a'\in\cal A} {q_k(S_{t+1},a')} | S_t=s, A_t=a}\\[3mm]
+q_{k+1}(s,a) &= \expval{}{R_{t+1} + \gamma \max_{a'\in\cal A} {q_k(S_{t+1},a')} \,\big\rvert\, S_t=s, A_t=a}\\[3mm]
 &= \sum_{s',r} p(s',r|s,a)\left[ r + \gamma\, \max_{a' \in \cal A}\,q_{k}(s',a') \right]
 \end{align*}
 
@@ -79,14 +79,14 @@ Cf. code.
 
 \item
 
-During each iteration of value iteration, for every state we compute the maximum over $|\cal A|$ elements which take themselves $O(|\cal S||\cal R|)$ operations to compute. So each iteration in VI has time complexity $O(|\cal S|^2|\cal R||\cal A|)$, if we assume that evaluating $v$ has constant time complexity (e.g. when we are in a tabular case). \\[4mm]
+During each iteration of value iteration, for every state we compute the maximum over $|\cal A|$ elements which take themselves $O(|\cal S||\cal R|)$ operations to compute. So each iteration in VI has time complexity $O(|\cal S|^2|\cal R||\cal A|)$, if we assume that evaluating $v$ has constant time complexity (e.g. when we are in a tabular case).
 
 In policy iteration, we have two steps per iteration.
 In the evaluation step, each improvement in the evaluation costs $O( |\cal S||\cal R||\cal A|)$ time for each state, which we need to multiply by the number of iterations it takes for the evaluation to converge to $v^\pi$. So if it takes $O(N)$ iterations to converge, then this step has time complexity $O(N|\cal S|^2|\cal R||\cal A|)$
 
 In the improvement step, we essentially perform the same computation as in the value iteration update, just that we are concerned with the argmax, rather than the max. So this step costs $O(|\cal S|^2|\cal R||\cal A|)$ as well.
 
-So, if we assume that it takes value iteration a factor of $\alpha$ more global iterations to converge than policy iteration (e.g. $\alpha = 1$), then value iteration is faster by a factor of $N/\alpha$.
+So, if we assume that it takes value iteration a factor of $\alpha$ more global iterations to converge than policy iteration (e.g. $\alpha = 1$), because it is working with a less accurate estimate of the current value function, then value iteration is faster by a factor of $N/\alpha$.
 
 \end{enumerate}
 
