@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{scrextend}
+\usepackage{mathrsfs}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{float}
+\usepackage{comment}
+\usepackage{my_math}
+
+\titleformat*{\section}{\normalsize\bfseries}
+\setlength{\droptitle}{-3cm}
+
+\title{Reinforcement Learning - Exercise Sheet 3}
+\author{Tom Lieberum - ID 13253042 \and Erik Jenner - ID 13237896}
+
+\begin{document}
+\maketitle
+
+\section*{3.1 Coding Assignment - Monte Carlo}
+
+\subsection*{1.}
+
+First we expand $V_n$:
+\[
+V_n = \frac{\sum_{k=1}^n W_kG_k}{n} = \frac{W_nG_n + \sum_{k=1}^{n-1} W_kG_k}{n}
+\]
+
+\noindent Multiplying with $n$ yields
+\begin{align*}
+nV_n &= W_nG_n + \sum_{k=1}^{n-1} W_kG_k = W_nG_n + (n-1) V_{n-1}\\[2mm] \iff V_n &= \frac{n-1}{n} V_{n-1} + \frac{1}{n}W_nG_n\\[2mm] &= V_{n-1} + \frac{1}{n}(W_nG_n - V_{n-1}) 
+\end{align*}
+
+\begin{comment}
+\section*{3.2 Importance Sampling in Monte Carlo methods}
+\subsection*{1. Disadvantage of ordinary IS in off-policy MC}
+
+\subsection*{2. Disadvantage of weighted IS in off-policy MC}
+\end{comment}
+
+
+
+\end{document}
