@@ -36,6 +36,15 @@ V_n = \frac{\sum_{k=1}^n W_kG_k}{n} = \frac{W_nG_n + \sum_{k=1}^{n-1} W_kG_k}{n}
 nV_n &= W_nG_n + \sum_{k=1}^{n-1} W_kG_k = W_nG_n + (n-1) V_{n-1}\\[2mm] \iff V_n &= \frac{n-1}{n} V_{n-1} + \frac{1}{n}W_nG_n\\[2mm] &= V_{n-1} + \frac{1}{n}(W_nG_n - V_{n-1}) 
 \end{align*}
 
+
+\subsection*{2.}
+See the autograd file.
+
+\subsection*{3.}
+The key difference between Dynamic Programming and Monte Carlo methods is that the former does a wide, one-step backup, whereas the latter compute a maximally deep but very narrow backup. So, if it is easy to simulate trajectories, but expensive to compute the wide backups for all states and actions or the transition probabilities are not known, then we should use Monte Carlo methods. However, if simulating trajectories is expensive, maybe because the simulation runs in a detailed physics engine or we can only sample trajectories on real robots, then we want to use Dynamic Programming instead.
+
+
+
 \begin{comment}
 \section*{3.2 Importance Sampling in Monte Carlo methods}
 \subsection*{1. Disadvantage of ordinary IS in off-policy MC}
@@ -43,6 +52,59 @@ nV_n &= W_nG_n + \sum_{k=1}^{n-1} W_kG_k = W_nG_n + (n-1) V_{n-1}\\[2mm] \iff V_
 \subsection*{2. Disadvantage of weighted IS in off-policy MC}
 \end{comment}
 
+
+\section*{4.3 Coding assignment - Temporal Difference Learning}
+\subsection*{1.}
+See the autograd file.
+
+\subsection*{2.}
+In contrast to example 6.6 from RL:AI, we observe that Q-learning performs better than SARSA in learning the given task. Presumably, this is because in this particular environment there is no cliff which would yield a large negative reward. The agent only gets pushed back a bit when acting sub-optimally. Therefore a greedy strategy will be successful.
+
+\section*{4.4 Maximization Bias}
+\subsection*{1.}
+
+If we assume that Sarsa acts $\epsilon$-greedily w.r.t. its estimate of the $Q$-function we obtain
+
+Sarsa:
+\begin{align*}
+Q(B, a_1) &= 0\\
+Q(B, a_2) &= 1\\
+Q(B, a_3) &= 0.5\\
+Q(B, a_4) &= 0.5\\
+Q(A, L) &=  0.7\\
+Q(A, R) &=  (1-\epsilon) + 0.5\epsilon = 1-0.5\epsilon
+\end{align*}
+
+Q-learning
+\begin{align*}
+Q(B, a_1) &= 0\\
+Q(B, a_2) &= 1\\
+Q(B, a_3) &= 0.5\\
+Q(B, a_4) &= 0.5\\
+Q(A, L) &=  0.7\\
+Q(A, R) &=  1
+\end{align*}
+
+
+
+\subsection*{2.}
+\begin{align*}
+Q(B, a_i) &= 0.5 ,\, \text{ where  }i\in\set{1,2,3,4}\\
+Q(A, L) &= 0.7\\
+Q(A, R) &= \sum_{i=1}^4 Q(B,a_i) = Q(B,a_1) = 0.5
+\end{align*}
+
+
+\subsection*{3.}
+Moth methods suffer from maximization bias which can be observed in the estimate for $Q(A,R)$, which those methods calculate by taking an ($\epsilon$-)greedy approach in the successor state $B$. Since both methods compute the maximum over actions\footnote{Sarsa does this with probability $1-\epsilon$.}, they overestimate the value of the subsequent state $B$.
+
+
+\subsection*{4.}
+The root of the problem of maximization bias is that the learned $Q$-function is used both to sample/select the next action as well as for judging the selected action. Thus those two estimates are correlated, leading to a bias. 
+
+In Double Q-learning, we learn two $Q$-functions on different datasets, i.e. different sets of episodes. For this example, that would mean that they observe different values for the transition from $B\to T$, resulting in different estimates of $B's$ value. The estimates $Q_1$ and $Q_2$ would be independent and so we could use $Q_2(B, a)$ as an unbiased estimate of the value of taking action $a$ in state $B$ when updating the value of $Q_1$ of taking action $R$ in state $A$ (or vice versa)\footnote{See also {Hado van Hasselt: 'Double Q-Learning'}}.
+
+ 
 
 
 \end{document}
