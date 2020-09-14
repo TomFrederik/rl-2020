@@ -124,19 +124,360 @@ def mc_prediction(env, policy, num_episodes, discount_factor=1.0, sampling_funct
                 already_updated[states[j]] =  True
                 returns_count[states[j]] += 1
                 episode_returns[states[j]] = 0
-                V[states[j]] = 0
 
             episode_returns[states[j]] *= discount_factor
             episode_returns[states[j]] += rewards[j]
 
         # update value function
         
-        for state in V.keys():
-            V[state] += 1/returns_count[state] * (episode_returns[state] - V[state])
+        for state in already_updated.keys():
+            if not V[state]:
+                V[state] = episode_returns[state]
+            else:
+                V[state] += 1/returns_count[state] * (episode_returns[state] - V[state])
                 
                 
             
     
     ## ##
+    
+    return V
+
+class RandomBlackjackPolicy(object):
+    """
+    A random BlackJack policy.
+    """
+    def get_probs(self, states, actions):
+        """
+        This method takes a list of states and a list of actions and returns a numpy array that contains 
+        a probability of perfoming action in given state for every corresponding state action pair. 
+
+        Args:
+            states: a list of states.
+            actions: a list of actions.
+
+        Returns:
+            Numpy array filled with probabilities (same length as states and actions)
+        """
+        
+        ## MY CODE ##
+        probs = 0.5*np.ones(len(states))
+        ## ##
+        
+        return probs
+    
+    def sample_action(self, state):
+        """
+        This method takes a state as input and returns an action sampled from this policy.  
+
+        Args:
+            state: current state
+
+        Returns:
+            An action (int).
+        """
+        ## MY CODE ##
+        action = np.random.randint(0,2)
+        ## ##
+        return action
+
+def mc_importance_sampling(env, behavior_policy, target_policy, num_episodes, discount_factor=1.0,
+                           sampling_function=sample_episode):
+    """
+    Monte Carlo prediction algorithm. Calculates the value function
+    for a given target policy using behavior policy and ordinary importance sampling.
+    
+    Args:
+        env: OpenAI gym environment.
+        behavior_policy: A policy used to collect the data.
+        target_policy: A policy which value function we want to estimate.
+        num_episodes: Number of episodes to sample.
+        discount_factor: Gamma discount factor.
+        sampling_function: Function that generates data from one episode.
+    
+    Returns:
+        A dictionary that maps from state -> value.
+        The state is a tuple and the value is a float.
+    """
+
+    # Keeps track of current V and count of returns for each state
+    # to calculate an update.
+    V = defaultdict(float)
+    returns_count = defaultdict(float)
+    
+    ## MY CODE ##
+    for i in tqdm(range(num_episodes)):
+        
+        # sample a new episode with the behavior policy and get the
+        # associated probabilities
+        states, actions, rewards, dones = sampling_function(env, behavior_policy)
+        behav_probs = behavior_policy.get_probs(states, actions)
+        
+        # keep track of episode returns and importance weight
+        importance_weight = 1
+        episode_return = 0
+        
+        # loop backwards through the episode
+        for t in range(len(states))[::-1]:
+    
+            # update the number of times we've been in this state
+            if not returns_count[state[t]]:
+                returns_count[state[t]] = 1
+            else:
+                returns_count[state[t]] += 1
+                
+            # update importance weight
+            importance_weight *= behav_probs[t]
+            
+            # update return
+            episode_return *= discount_factor
+            episode_return += rewards[t]
+            
+            # update V
+            V[states[t]] += 1/returns_count[states[t]] * (importance_weight * episode_return - V[states[t]])
+            
+            
+    ##  ##
+    
+    return V
+
+def mc_importance_sampling(env, behavior_policy, target_policy, num_episodes, discount_factor=1.0,
+                           sampling_function=sample_episode):
+    """
+    Monte Carlo prediction algorithm. Calculates the value function
+    for a given target policy using behavior policy and ordinary importance sampling.
+    
+    Args:
+        env: OpenAI gym environment.
+        behavior_policy: A policy used to collect the data.
+        target_policy: A policy which value function we want to estimate.
+        num_episodes: Number of episodes to sample.
+        discount_factor: Gamma discount factor.
+        sampling_function: Function that generates data from one episode.
+    
+    Returns:
+        A dictionary that maps from state -> value.
+        The state is a tuple and the value is a float.
+    """
+
+    # Keeps track of current V and count of returns for each state
+    # to calculate an update.
+    V = defaultdict(float)
+    returns_count = defaultdict(float)
+    
+    ## MY CODE ##
+    for i in tqdm(range(num_episodes)):
+        
+        # sample a new episode with the behavior policy and get the
+        # associated probabilities
+        states, actions, rewards, dones = sampling_function(env, behavior_policy)
+        behav_probs = behavior_policy.get_probs(states, actions)
+        
+        # keep track of episode returns and importance weight
+        importance_weight = 1
+        episode_return = 0
+        
+        # loop backwards through the episode
+        for t in range(len(states))[::-1]:
+    
+            # update the number of times we've been in this state
+            if not returns_count[states[t]]:
+                returns_count[states[t]] = 1
+            else:
+                returns_count[states[t]] += 1
+                
+            # update importance weight
+            importance_weight *= behav_probs[t]
+            
+            # update return
+            episode_return *= discount_factor
+            episode_return += rewards[t]
+            
+            # update V
+            V[states[t]] += 1/returns_count[states[t]] * (importance_weight * episode_return - V[states[t]])
+            
+            
+    ##  ##
+    
+    return V
+
+def mc_importance_sampling(env, behavior_policy, target_policy, num_episodes, discount_factor=1.0,
+                           sampling_function=sample_episode):
+    """
+    Monte Carlo prediction algorithm. Calculates the value function
+    for a given target policy using behavior policy and ordinary importance sampling.
+    
+    Args:
+        env: OpenAI gym environment.
+        behavior_policy: A policy used to collect the data.
+        target_policy: A policy which value function we want to estimate.
+        num_episodes: Number of episodes to sample.
+        discount_factor: Gamma discount factor.
+        sampling_function: Function that generates data from one episode.
+    
+    Returns:
+        A dictionary that maps from state -> value.
+        The state is a tuple and the value is a float.
+    """
+
+    # Keeps track of current V and count of returns for each state
+    # to calculate an update.
+    V = defaultdict(float)
+    returns_count = defaultdict(float)
+    
+    ## MY CODE ##
+    for i in tqdm(range(num_episodes)):
+        
+        # sample a new episode with the behavior policy and get the
+        # associated probabilities
+        states, actions, rewards, dones = sampling_function(env, behavior_policy)
+        behav_probs = behavior_policy.get_probs(states, actions)
+        
+        # keep track of episode returns and importance weight
+        importance_weight = 1
+        episode_return = 0
+        
+        # loop backwards through the episode
+        for t in range(len(states))[::-1]:
+    
+            # update the number of times we've been in this state
+            if not returns_count[states[t]]:
+                returns_count[states[t]] = 1
+            else:
+                returns_count[states[t]] += 1
+                
+            # update importance weight
+            importance_weight *= target_policy.get_probs[actions[t]]/behav_probs[t]
+            
+            # update return
+            episode_return *= discount_factor
+            episode_return += rewards[t]
+            
+            # update V
+            V[states[t]] += 1/returns_count[states[t]] * (importance_weight * episode_return - V[states[t]])
+            
+            
+    ##  ##
+    
+    return V
+
+def mc_importance_sampling(env, behavior_policy, target_policy, num_episodes, discount_factor=1.0,
+                           sampling_function=sample_episode):
+    """
+    Monte Carlo prediction algorithm. Calculates the value function
+    for a given target policy using behavior policy and ordinary importance sampling.
+    
+    Args:
+        env: OpenAI gym environment.
+        behavior_policy: A policy used to collect the data.
+        target_policy: A policy which value function we want to estimate.
+        num_episodes: Number of episodes to sample.
+        discount_factor: Gamma discount factor.
+        sampling_function: Function that generates data from one episode.
+    
+    Returns:
+        A dictionary that maps from state -> value.
+        The state is a tuple and the value is a float.
+    """
+
+    # Keeps track of current V and count of returns for each state
+    # to calculate an update.
+    V = defaultdict(float)
+    returns_count = defaultdict(float)
+    
+    ## MY CODE ##
+    for i in tqdm(range(num_episodes)):
+        
+        # sample a new episode with the behavior policy and get the
+        # associated probabilities
+        states, actions, rewards, dones = sampling_function(env, behavior_policy)
+        behav_probs = behavior_policy.get_probs(states, actions)
+        
+        # keep track of episode returns and importance weight
+        importance_weight = 1
+        episode_return = 0
+        
+        # loop backwards through the episode
+        for t in range(len(states))[::-1]:
+    
+            # update the number of times we've been in this state
+            if not returns_count[states[t]]:
+                returns_count[states[t]] = 1
+            else:
+                returns_count[states[t]] += 1
+                
+            # update importance weight
+            importance_weight *= target_policy.get_probs(actions[t])/behav_probs[t]
+            
+            # update return
+            episode_return *= discount_factor
+            episode_return += rewards[t]
+            
+            # update V
+            V[states[t]] += 1/returns_count[states[t]] * (importance_weight * episode_return - V[states[t]])
+            
+            
+    ##  ##
+    
+    return V
+
+def mc_importance_sampling(env, behavior_policy, target_policy, num_episodes, discount_factor=1.0,
+                           sampling_function=sample_episode):
+    """
+    Monte Carlo prediction algorithm. Calculates the value function
+    for a given target policy using behavior policy and ordinary importance sampling.
+    
+    Args:
+        env: OpenAI gym environment.
+        behavior_policy: A policy used to collect the data.
+        target_policy: A policy which value function we want to estimate.
+        num_episodes: Number of episodes to sample.
+        discount_factor: Gamma discount factor.
+        sampling_function: Function that generates data from one episode.
+    
+    Returns:
+        A dictionary that maps from state -> value.
+        The state is a tuple and the value is a float.
+    """
+
+    # Keeps track of current V and count of returns for each state
+    # to calculate an update.
+    V = defaultdict(float)
+    returns_count = defaultdict(float)
+    
+    ## MY CODE ##
+    for i in tqdm(range(num_episodes)):
+        
+        # sample a new episode with the behavior policy and get the
+        # associated probabilities
+        states, actions, rewards, dones = sampling_function(env, behavior_policy)
+        behav_probs = behavior_policy.get_probs(states, actions)
+        target_probs = target_policy.get_probs(states, actions)
+        
+        # keep track of episode returns and importance weight
+        importance_weight = 1
+        episode_return = 0
+        
+        # loop backwards through the episode
+        for t in range(len(states))[::-1]:
+    
+            # update the number of times we've been in this state
+            if not returns_count[states[t]]:
+                returns_count[states[t]] = 1
+            else:
+                returns_count[states[t]] += 1
+                
+            # update importance weight
+            importance_weight *= target_probs[t]/behav_probs[t]
+            
+            # update return
+            episode_return *= discount_factor
+            episode_return += rewards[t]
+            
+            # update V
+            V[states[t]] += 1/returns_count[states[t]] * (importance_weight * episode_return - V[states[t]])
+            
+            
+    ##  ##
     
     return V
