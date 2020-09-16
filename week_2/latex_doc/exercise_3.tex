@@ -41,7 +41,7 @@ nV_n &= W_nG_n + \sum_{k=1}^{n-1} W_kG_k = W_nG_n + (n-1) V_{n-1}\\[2mm] \iff V_
 See the autograd file.
 
 \subsection*{3.}
-The key difference between Dynamic Programming and Monte Carlo methods is that the former does a wide, one-step backup, whereas the latter compute a maximally deep but very narrow backup. So, if it is easy to simulate trajectories, but expensive to compute the wide backups for all states and actions or the transition probabilities are not known, then we should use Monte Carlo methods. However, if simulating trajectories is expensive, maybe because the simulation runs in a detailed physics engine or we can only sample trajectories on real robots, then we want to use Dynamic Programming instead. Another important advantage of Dynamic Programming is that it does not depend on the MDP terminating. This means it can be used in continuing environments or as an online updating scheme, whereas Monte Carlo methods need each episode to terminate before they can perform an update.
+The key difference between Dynamic Programming and Monte Carlo methods is that the former does a wide, one-step backup, whereas the latter compute a maximally deep but very narrow backup. So, if it is easy to simulate trajectories, but expensive to compute the wide backups for all states and actions or the transition probabilities are not known, then we should use Monte Carlo methods. However, if the transition probabilities are known and the system is small enough to make backups feasible, Dynamic Programming is the most direct method to obtain optimal solutions since sampling trajectories first just adds noise that unnecessarily increases errors. Another important advantage of Dynamic Programming is that it does not depend on the MDP terminating. This means it can be used in continuing environments or as an online updating scheme, whereas Monte Carlo methods need each episode to terminate before they can perform an update.
 
 
 
@@ -63,7 +63,7 @@ In contrast to example 6.6 from RL:AI, we observe that Q-learning performs bette
 \section*{4.4 Maximization Bias}
 \subsection*{1.}
 
-If we assume that Sarsa acts $\epsilon$-greedily w.r.t. its estimate of the $Q$-function we obtain
+If we assume that Sarsa acts $\epsilon$-greedily w.r.t.\ its estimate of the $Q$-function we obtain
 
 Sarsa:
 \begin{align*}
@@ -91,18 +91,21 @@ Q(A, R) &=  1
 \begin{align*}
 Q(B, a_i) &= 0.5 ,\, \text{ where  }i\in\set{1,2,3,4}\\
 Q(A, L) &= 0.7\\
-Q(A, R) &= \sum_{i=1}^4 Q(B,a_i) = Q(B,a_1) = 0.5
+Q(A, R) &= \sum_{i=1}^4 \pi(a_i|A) Q(B,a_i) = 0.5
 \end{align*}
-
+where the policy \(\pi\) in the last equation is either greedy or \(\epsilon\)-greedy but doesn't matter
+anyways since \(Q(B, a_i) = 0.5\; \forall i\).
 
 \subsection*{3.}
-Moth methods suffer from maximization bias which can be observed in the estimate for $Q(A,R)$, which those methods calculate by taking an ($\epsilon$-)greedy approach in the successor state $B$. Since both methods compute the maximum over actions\footnote{Sarsa does this with probability $1-\epsilon$.}, they overestimate the value of the subsequent state $B$.
+Both methods suffer from maximization bias which can be observed in the estimate for $Q(A,R)$, which those methods calculate by taking an ($\epsilon$-)greedy approach in the successor state $B$. Since both methods compute the maximum over actions\footnote{Sarsa does this with probability $1-\epsilon$.}, they overestimate the value of the subsequent state $B$.
 
 
 \subsection*{4.}
-The root of the problem of maximization bias is that the learned $Q$-function is used both to sample/select the next action as well as for judging the selected action. Thus those two estimates are correlated, leading to a bias. 
+The root of the problem of maximization bias is that the learned $Q$-function is used both to sample/select the next action as well as for judging the selected action. Since \(\mathbb{E}[\max_i X_i] \geq \max_i \mathbb{E}[X_i]\) for random variables \(X_i\), this leads to a bias towards higher \(Q\)-values (let \(X_i = Q(s, a_i)\) and take the expected value over the data that produces this \(Q\)-estimate).
 
-In Double Q-learning, we learn two $Q$-functions on different datasets, i.e. different sets of episodes. For this example, that would mean that they observe different values for the transition from $B\to T$, resulting in different estimates of $B's$ value. The estimates $Q_1$ and $Q_2$ would be independent and so we could use $Q_2(B, a)$ as an unbiased estimate of the value of taking action $a$ in state $B$ when updating the value of $Q_1$ of taking action $R$ in state $A$ (or vice versa)\footnote{See also {Hado van Hasselt: 'Double Q-Learning'}}.
+In Double Q-learning, we learn two $Q$-functions on different datasets, i.e.\ different sets of episodes. For this example, that would mean that they observe different values for the transition from $B\to T$, resulting in different estimates of $B$'s value. This eliminates the problem of '\(\mathbb{E}\max \geq \max \mathbb{E}\)'.
+
+In the given example, \(\argmax_i Q_1(B, a_i)\) is equally likely to be any of \(\{1, \ldots, 4\}\) if \(Q_1\) is based on randomly sampled experience from the MDP. Thus the expectation over possible experience of \(\Q_2(B, \argmax_i Q_1(B, a_i))\) is 0.5 which is the unbiased estimate. Note that this is not always the case -- Double Q-Learning can \emph{underestimate} the maximum Q-values in some cases\footnote{See also {Hado van Hasselt: 'Double Q-Learning'}}.
 
  
 
