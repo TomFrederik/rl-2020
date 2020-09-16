@@ -4,6 +4,7 @@ from tqdm import tqdm as _tqdm
 
 def tqdm(*args, **kwargs):
     return _tqdm(*args, **kwargs, mininterval=1)  # Safety, do not overflow buffer
+import random
 
 class EpsilonGreedyPolicy(object):
     """
@@ -143,12 +144,13 @@ def q_learning(env, policy, Q, num_episodes, discount_factor=1.0, alpha=0.5):
             i += 1
             
             # update Q
-            Q[obs, action] += alpha * ( rew + discount_factor * np.max(Q[new_obs,:]) - Q[obs, action])
+            policy.Q[obs, action] += alpha * ( rew + discount_factor * np.max(policy.Q[new_obs,:]) - policy.Q[obs, action])
             
             # update state and action
             obs = new_obs
             action = policy.sample_action(obs)
             
+        Q = policy.Q
         ## ##
         
         stats.append((i, R))
