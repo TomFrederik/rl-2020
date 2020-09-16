@@ -41,7 +41,7 @@ nV_n &= W_nG_n + \sum_{k=1}^{n-1} W_kG_k = W_nG_n + (n-1) V_{n-1}\\[2mm] \iff V_
 See the autograd file.
 
 \subsection*{3.}
-The key difference between Dynamic Programming and Monte Carlo methods is that the former does a wide, one-step backup, whereas the latter compute a maximally deep but very narrow backup. So, if it is easy to simulate trajectories, but expensive to compute the wide backups for all states and actions or the transition probabilities are not known, then we should use Monte Carlo methods. However, if simulating trajectories is expensive, maybe because the simulation runs in a detailed physics engine or we can only sample trajectories on real robots, then we want to use Dynamic Programming instead.
+The key difference between Dynamic Programming and Monte Carlo methods is that the former does a wide, one-step backup, whereas the latter compute a maximally deep but very narrow backup. So, if it is easy to simulate trajectories, but expensive to compute the wide backups for all states and actions or the transition probabilities are not known, then we should use Monte Carlo methods. However, if simulating trajectories is expensive, maybe because the simulation runs in a detailed physics engine or we can only sample trajectories on real robots, then we want to use Dynamic Programming instead. Another important advantage of Dynamic Programming is that it does not depend on the MDP terminating. This means it can be used in continuing environments or as an online updating scheme, whereas Monte Carlo methods need each episode to terminate before they can perform an update.
 
 
 
