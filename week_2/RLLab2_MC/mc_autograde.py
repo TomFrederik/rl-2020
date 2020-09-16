@@ -117,8 +117,7 @@ def mc_prediction(env, policy, num_episodes, discount_factor=1.0, sampling_funct
         
         # keeps track of first visit
         already_updated = defaultdict(bool)
-        # keeps track of episode return
-        episode_returns = defaultdict(float)
+        # return for this episode
         G = 0
         
         # reversed(zip(states, rewards)) doesn't work because reversed only works on sequences 
@@ -126,21 +125,11 @@ def mc_prediction(env, policy, num_episodes, discount_factor=1.0, sampling_funct
             G *= discount_factor
             G += reward
             
-            if not (state in already_updated):
+            if not already_updated[state]:
                 already_updated[state] =  True
                 returns_count[state] += 1
-                episode_returns[state] = G
+                V[state] += 1/returns_count[state] * (G - V[state])
 
-        # update value function
-        
-        for state in already_updated:
-            if not V[state]:
-                V[state] = episode_returns[state]
-            else:
-                V[state] += 1/returns_count[state] * (episode_returns[state] - V[state])
-                
-                
-            
     
     ## ##
     
