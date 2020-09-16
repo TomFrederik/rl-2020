@@ -105,7 +105,7 @@ The root of the problem of maximization bias is that the learned $Q$-function is
 
 In Double Q-learning, we learn two $Q$-functions on different datasets, i.e.\ different sets of episodes. For this example, that would mean that they observe different values for the transition from $B\to T$, resulting in different estimates of $B$'s value. This eliminates the problem of '\(\mathbb{E}\max \geq \max \mathbb{E}\)'.
 
-In the given example, \(\argmax_i Q_1(B, a_i)\) is equally likely to be any of \(\{1, \ldots, 4\}\) if \(Q_1\) is based on randomly sampled experience from the MDP. Thus the expectation over possible experience of \(Q_2(B, \argmax_i Q_1(B, a_i))\) is 0.5 which is the unbiased estimate. Note that this is not always the case -- Double Q-Learning can \emph{underestimate} the maximum Q-values in some cases\footnote{See also {Hado van Hasselt: 'Double Q-Learning'}}.
+In the given example, \(\argmax_i Q_1(B, a_i)\) is equally likely to be any of \(\{1, \ldots, 4\}\) if \(Q_1\) is based on randomly sampled experience from the MDP. Thus the expectation over possible experience of \(Q_2(B, \argmax_i Q_1(B, a_i))\) is 0.5 which is the unbiased estimate.This means that the Q-target will be unbiased and therefore we avoid maximization bias. Note that this is not always the case -- Double Q-Learning can \emph{underestimate} the maximum Q-values in some cases\footnote{See also {Hado van Hasselt: 'Double Q-Learning'}}.
 
  
 
