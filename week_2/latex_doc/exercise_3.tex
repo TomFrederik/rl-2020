@@ -58,7 +58,7 @@ The key difference between Dynamic Programming and Monte Carlo methods is that t
 See the autograd file.
 
 \subsection*{2.}
-In contrast to example 6.6 from RL:AI, we observe that Q-learning performs better than SARSA in learning the given task. Presumably, this is because in this particular environment there is no cliff which would yield a large negative reward. The agent only gets pushed back a bit when acting sub-optimally. Therefore a greedy strategy will be successful.
+In contrast to example 6.6 from RL:AI, we observe that Q-learning performs better than SARSA in learning the given task. Presumably, this is because in this particular environment there is no cliff which would yield a large negative reward. Because of that, caution is unnecessary; or more formally: \[\epsilon \cdot \text{random policy} + (1 - \epsilon) \cdot \text{optimal policy}\] is an optimal \(\epsilon\)-soft policy. Therefore, Q-learning is not punished for learning the greedy Q-values while behaving according to an \(\epsilon\)-greedy policy.
 
 \section*{4.4 Maximization Bias}
 \subsection*{1.}
@@ -91,7 +91,7 @@ Q(A, R) &=  1
 \begin{align*}
 Q(B, a_i) &= 0.5 ,\, \text{ where  }i\in\set{1,2,3,4}\\
 Q(A, L) &= 0.7\\
-Q(A, R) &= \sum_{i=1}^4 \pi(a_i|A) Q(B,a_i) = 0.5
+Q(A, R) &= \sum_{i=1}^4 \pi(a_i|B) Q(B,a_i) = 0.5
 \end{align*}
 where the policy \(\pi\) in the last equation is either greedy or \(\epsilon\)-greedy but doesn't matter
 anyways since \(Q(B, a_i) = 0.5\; \forall i\).
@@ -105,7 +105,7 @@ The root of the problem of maximization bias is that the learned $Q$-function is
 
 In Double Q-learning, we learn two $Q$-functions on different datasets, i.e.\ different sets of episodes. For this example, that would mean that they observe different values for the transition from $B\to T$, resulting in different estimates of $B$'s value. This eliminates the problem of '\(\mathbb{E}\max \geq \max \mathbb{E}\)'.
 
-In the given example, \(\argmax_i Q_1(B, a_i)\) is equally likely to be any of \(\{1, \ldots, 4\}\) if \(Q_1\) is based on randomly sampled experience from the MDP. Thus the expectation over possible experience of \(\Q_2(B, \argmax_i Q_1(B, a_i))\) is 0.5 which is the unbiased estimate. Note that this is not always the case -- Double Q-Learning can \emph{underestimate} the maximum Q-values in some cases\footnote{See also {Hado van Hasselt: 'Double Q-Learning'}}.
+In the given example, \(\argmax_i Q_1(B, a_i)\) is equally likely to be any of \(\{1, \ldots, 4\}\) if \(Q_1\) is based on randomly sampled experience from the MDP. Thus the expectation over possible experience of \(Q_2(B, \argmax_i Q_1(B, a_i))\) is 0.5 which is the unbiased estimate. Note that this is not always the case -- Double Q-Learning can \emph{underestimate} the maximum Q-values in some cases\footnote{See also {Hado van Hasselt: 'Double Q-Learning'}}.
 
  
 
