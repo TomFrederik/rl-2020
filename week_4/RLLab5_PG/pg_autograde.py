@@ -128,10 +128,11 @@ def compute_reinforce_loss(policy, episode, discount_factor):
     
     loss = 0
     G = 0
+    
     for t in range(episode_len):
-        G = discount_factor * G + rewards[-t,0]
-        loss -= G * action_log_probs[-t,0]
-
+        G = discount_factor * G + rewards[-(t+1),0]
+        loss -= G * action_log_probs[-(t+1),0]
+    
     return loss
 
 # YOUR CODE HERE
