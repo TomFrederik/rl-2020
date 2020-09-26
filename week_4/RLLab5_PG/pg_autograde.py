@@ -61,68 +61,6 @@ class NNPolicy(nn.Module):
             An action (int).
         """
         # YOUR CODE HERE
-        obs = obs.view(1, -1)
-        action_probs = self.forward(obs)[0]
-        print(self.forward(obs).shape)
-        print(action_probs.shape)
-        action = torch.multinomial(action_probs, 1).item()
-        return action
-        
-        
-
-class NNPolicy(nn.Module):
-    
-    def __init__(self, num_hidden=128):
-        nn.Module.__init__(self)
-        self.l1 = nn.Linear(4, num_hidden)
-        self.l2 = nn.Linear(num_hidden, 2)
-
-    def forward(self, x):
-        """
-        Performs a forward pass through the network.
-        
-        Args:
-            x: input tensor (first dimension is a batch dimension)
-            
-        Return:
-            Probabilities of performing all actions in given input states x. Shape: batch_size x action_space_size
-        """
-        # YOUR CODE HERE
-        out = self.l1(x)
-        out = F.relu(out)
-        out = self.l2(out)
-        out = F.softmax(out, dim=1)
-        return out
-        
-    def get_probs(self, obs, actions):
-        """
-        This function takes a tensor of states and a tensor of actions and returns a tensor that contains 
-        a probability of perfoming corresponding action in all states (one for every state action pair). 
-
-        Args:
-            obs: a tensor of states. Shape: batch_size x obs_dim
-            actions: a tensor of actions. Shape: batch_size x 1
-
-        Returns:
-            A torch tensor filled with probabilities. Shape: batch_size x 1.
-        """
-        # YOUR CODE HERE
-        bs = obs.size(0)
-        all_probs = self.forward(obs)
-        action_probs = all_probs[range(bs), actions[:, 0]]
-        return action_probs.view(bs, 1)
-    
-    def sample_action(self, obs):
-        """
-        This method takes a state as input and returns an action sampled from this policy.  
-
-        Args:
-            obs: state as a tensor. Shape: 1 x obs_dim or obs_dim
-
-        Returns:
-            An action (int).
-        """
-        # YOUR CODE HERE
         obs = obs.view(1, -1) # ensure that first dim is 1
         action_probs = self.forward(obs)[0]
         action = torch.multinomial(action_probs, 1).item()
@@ -186,10 +124,14 @@ def compute_reinforce_loss(policy, episode, discount_factor):
     # YOUR CODE HERE
     states, actions, rewards, dones = episode
     episode_len = rewards.size(0)
-    G = torch.sum(rewards.squeeze() * discount_factor ** torch.arange(episode_len))
-    action_probs = policy.get_probs(states, actions)
-    loss = - action_probs.log().sum() * G
+    action_log_probs = torch.log(policy.get_probs(states, actions))
     
+    loss = 0
+    G = 0
+    for t in range(episode_len):
+        G = discount_factor * G + rewards[-t,0]
+        loss -= G * action_log_probs[-t,0]
+
     return loss
 
 # YOUR CODE HERE
